@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment files
+.env
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# Flask
+instance/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets
+config.py
+secret.py
+
+# Termux
+*.swp
