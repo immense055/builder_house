@@ -6,33 +6,34 @@ __pycache__/
 
 # Virtual Environment
 venv/
-env/
+.env/
 .venv/
 
-# Environment files
+# Environment Variables
 .env
 
-# Database
-*.db
-*.sqlite3
+# Flask
+instance/
+.flaskenv
 
 # Logs
 *.log
 
-# Flask
-instance/
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
 # IDE
 .vscode/
 .idea/
 
-# OS files
+# macOS
 .DS_Store
-Thumbs.db
-
-# Secrets
-config.py
-secret.py
 
 # Termux
+.termux/
+
+# Temporary Files
+*.tmp
 *.swp
