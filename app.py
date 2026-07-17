@@ -4,12 +4,14 @@ import bcrypt
 from routes.auth import auth
 from routes.users import users
 from routes.admin import admin
+from routes.bitcoin import bitcoin
 
 app = Flask(__name__)
 
 app.register_blueprint(auth)
 app.register_blueprint(users)
 app.register_blueprint(admin)
+app.register_blueprint(bitcoin)
 
 @app.route("/")
 def home():

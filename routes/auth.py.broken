@@ -1,4 +1,29 @@
-from flask import Blueprint, request, jsonify
+from flask import request
+from database.db import get_connection
+
+
+def log_action(user_id, action):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        ip_address = request.remote_addr
+        user_agent = request.headers.get("User-Agent", "")
+
+        cursor.execute(
+            """
+            INSERT INTO audit_logs
+            (user_id, action, ip_address, user_agent)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (user_id, action, ip_address, user_agent),
+        )
+
+        conn.commit()
+
+    finally:
+        cursor.close()
+        conn.close()from flask import Blueprint, request, jsonify
 from database.db import get_connection
 from utils.jwt_helper import create_token
 from utils.audit_logger import log_action
@@ -11,9 +36,6 @@ auth = Blueprint("auth", __name__)
 def login():
     data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "Invalid JSON"}), 400
-
     email = data.get("email")
     password = data.get("password")
 
@@ -24,29 +46,31 @@ def login():
     cursor = conn.cursor()
 
     try:
-        cursor.execute("""
-            SELECT
-                id,
-                username,
-                full_name,
-                email,
-                password_hash,
-                role,
-                status
+        cursor.execute(
+            """
+            SELECT id,
+                   username,
+                   full_name,
+                   email,
+                   password_hash,
+                   role,
+                   status
             FROM users
             WHERE email=%s
-        """, (email,))
+            """,
+            (email,)
+        )
 
         user = cursor.fetchone()
 
-        if user is None:
-            return jsonify({"error": "Invalid email or password"}), 401
+        if not user:
+            return jsonify({"error": "Invalid credentials"}), 401
 
         if not bcrypt.checkpw(
             password.encode(),
             user["password_hash"].encode()
         ):
-            return jsonify({"error": "Invalid email or password"}), 401
+            return jsonify({"error": "Invalid credentials"}), 401
 
         if user["status"] != "active":
             return jsonify({"error": "Account is not active"}), 403
@@ -58,21 +82,25 @@ def login():
         )
 
         cursor.execute(
-            "UPDATE users SET last_login=CURRENT_TIMESTAMP WHERE id=%s",
+            """
+            UPDATE users
+            SET last_login = CURRENT_TIMESTAMP
+            WHERE id=%s
+            """,
             (user["id"],)
         )
 
         conn.commit()
 
-        log_action(user["id"], "User login")
-
         user.pop("password_hash", None)
+
+        log_action(user["id"], "User login")
 
         return jsonify({
             "message": "Login successful",
             "token": token,
             "user": user
-        }), 200
+        })
 
     except Exception as e:
         conn.rollback()
