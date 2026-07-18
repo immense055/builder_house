@@ -1,14 +1,24 @@
 from flask import request, jsonify, g
 from database.db import get_connection
 from datetime import date
+from middleware import check_rate_limit
 
+def test_api():
+
+    limit = check_rate_limit()
+
+    if limit:
+        return limit
+
+
+    log_request(200)
 
 def check_rate_limit():
 
-    api_key = getattr(g, "api_key", None)
+    print("RATE LIMIT RUNNING")
+    print("KEY:", getattr(g, "api_key", None))
 
-    if not api_key:
-        return None
+    api_key = getattr(g, "api_key", None)
 
     conn = get_connection()
 
@@ -17,7 +27,10 @@ def check_rate_limit():
 
             cursor.execute(
                 """
-                SELECT daily_limit, requests_today, last_reset
+                SELECT
+                    daily_limit,
+                    requests_today,
+                    last_reset
                 FROM api_keys
                 WHERE api_key=%s
                 """,
@@ -26,24 +39,30 @@ def check_rate_limit():
 
             data = cursor.fetchone()
 
+
             if not data:
-                return jsonify({"error": "API key not found"}), 401
+                return jsonify({
+                    "error":"API Key not found"
+                }),401
 
 
             today = date.today()
 
 
+            # Reset counter daily
             if str(data["last_reset"]) != str(today):
 
                 cursor.execute(
                     """
                     UPDATE api_keys
                     SET requests_today=0,
-                        last_reset=%s
+                    last_reset=%s
                     WHERE api_key=%s
                     """,
                     (today, api_key)
                 )
+
+                conn.commit()
 
                 used = 0
 
@@ -51,13 +70,24 @@ def check_rate_limit():
                 used = data["requests_today"]
 
 
-            if used >= data["daily_limit"]:
-                return jsonify({
-                    "error": "Rate limit exceeded",
-                    "limit": data["daily_limit"],
-                    "used": used
-                }), 429
 
+            # Limit check
+
+            if used >= data["daily_limit"]:
+
+                return jsonify({
+
+                    "error":"Rate limit exceeded",
+
+                    "limit": data["daily_limit"],
+
+                    "used": used
+
+                }),429
+
+
+
+            # Increase usage
 
             cursor.execute(
                 """
@@ -70,7 +100,9 @@ def check_rate_limit():
 
             conn.commit()
 
+
     finally:
         conn.close()
+
 
     return None
