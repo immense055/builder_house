@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import bcrypt
+from flask import Flask, render_template
 
 from database.db import get_connection
 
@@ -16,7 +17,10 @@ import secrets
 from auth import require_api_key
 from logger import log_request
 from middleware import check_rate_limit
+from routes.miners import miners
+from routes.mining import mining_routes
 
+app.register_blueprint(mining_routes)
 app = Flask(__name__)
 
 # Register Blueprints
@@ -25,7 +29,7 @@ app.register_blueprint(users)
 app.register_blueprint(admin)
 app.register_blueprint(bitcoin)
 app.register_blueprint(dashboard)
-
+app.register_blueprint(miners)
 
 @app.route("/")
 def home():
@@ -34,6 +38,25 @@ def home():
     })
 
 
+@app.route("/scanner")
+def scanner():
+    from services.nmap_service import scan_network
+    from services.scanner_db import save_device
+
+    devices = scan_network()
+
+    for device in devices:
+        save_device(device)
+
+    return {
+        "devices": devices,
+        "saved": True
+    }
+
+
+@app.route("/scanner-page")
+def scanner_page():
+    return render_template("scanner.html")
 @app.route("/api-keys", methods=["GET"])
 def api_keys():
 
@@ -44,7 +67,7 @@ def api_keys():
 
             cursor.execute("""
             SELECT
-                id,
+            id,
                 api_key,
                 owner,
                 plan,

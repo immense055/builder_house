@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Builder House - LAN Device Scanner</title>
+</head>
+<body>
+
+<h2>Builder House - LAN Device Scanner</h2>
+
+<button type="button" onclick="scanNetwork()">Scan Network</button>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>IP Address</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="devices">
+    </tbody>
+</table>
+
+<script>
+function scanNetwork() {
+    fetch("/scanner")
+    .then(response => response.json())
+    .then(data => {
+        let table = "";
+
+        data.devices.forEach(device => {
+            table += `
+            <tr>
+                <td>${device.ip_address}</td>
+                <td>${device.status}</td>
+            </tr>`;
+        });
+
+        document.getElementById("devices").innerHTML = table;
+    });
+}
+</script>
+
+</body>
+</html>

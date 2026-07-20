@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from database.db import get_db
+from database.db import get_connection
 
 from services.bitcoin_service import (
     get_bitcoin_price,
@@ -120,18 +120,13 @@ def dashboard():
         "message": "mining dashboard working"
     })
 
-@bitcoin.route("/bitcoin/broadcast", methods=["POST"])
-def broadcast():
-    ...
-
-CTRL + _999
-
 # ========= Wallet API =========
 
 @bitcoin.route("/bitcoin/wallet", methods=["GET"])
 def get_wallet():
+    ...
 
-    conn = get_db()
+    conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -153,19 +148,18 @@ def add_wallet():
 
     body = request.get_json()
 
-    conn = get_db()
+    conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
         INSERT INTO wallets
         (coin, wallet_address, label, wallet_type)
         VALUES (%s,%s,%s,%s)
-    """,
-    (
-        body.get("coin","BTC"),
+    """, (
+        body.get("coin", "BTC"),
         body.get("wallet_address"),
         body.get("label"),
-        body.get("wallet_type","payout")
+        body.get("wallet_type", "payout")
     ))
 
     conn.commit()
@@ -174,5 +168,5 @@ def add_wallet():
     conn.close()
 
     return jsonify({
-        "message":"Wallet added"
+        "message": "Wallet added"
     })

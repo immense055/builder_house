@@ -1,0 +1,9 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+cd ~/xmrig/build || exit 1
+
+echo "===================================="
+echo " Builder_House Mining Engine"
+echo "===================================="
+
+./xmrig -c ~/builder_house/mining/config/config.json | tee -a ~/builder_house/mining/logs/xmrig.log

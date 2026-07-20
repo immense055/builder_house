@@ -1,0 +1,18 @@
+[1;32m * [0m[1;37mABOUT        [0m[1;36mXMRig/6.26.0[0m[1;37m clang/21.1.8[0m[1;37m (built for Android[0m[1;37m ARMv8,[0m[1;37m 64 bit)[0m[0m
+[1;32m * [0m[1;37mLIBS         libuv/1.52.1 OpenSSL/3.6.3 [0m[0m
+[1;32m * [0m[1;37mHUGE PAGES   [0m[1;32msupported[0m[0m
+[1;32m * [0m[1;37m1GB PAGES    [0m[1;33munavailable[0m[0m
+[1;32m * [0m[1;37mCPU          ARM Cortex-A53 (1)[0m [1;32m64-bit[0m [1;32mAES[0m
+[1;37m                [0m[1;30mthreads:[0m[1;36m8[0m[0m
+[1;32m * [0m[1;37mMEMORY       [0m[1;36m3.1/3.7[0m[0;36m GB[0m[1;30m (83%)[0m[0m
+[1;32m * [0m[1;37mDONATE       [0m[1;37m[1;31m0%[0m[0m
+[1;32m * [0m[1;37mPOOL #1      [0m[1;36mbenchmark[0m algo [1;37mauto[0m[0m
+[1;32m * [0m[1;37mCOMMANDS     [0m[45;1mh[0m[1;37mashrate, [0m[45;1mp[0m[1;37mause, [0m[45;1mr[0m[1;37mesume, [0m[1;37mre[0m[45m[1;37ms[0m[1;37mults, [0m[45;1mc[0m[1;37monnection[0m[0m
+[1;32m * [0m[1;37mOPENCL       [0m[1;31mdisabled[0m[0m
+[1;32m * [0m[1;37mCUDA         [0m[1;31mdisabled[0m[0m
+[2026-07-20 16:38:48[1;30m.154[0m] [1;37m[42;1m[1;37m bench   [0m [1;35mstart benchmark [0mhashes [1;36m10M[0m algo [1;37mrx/0[0m[0m
+[2026-07-20 16:38:48[1;30m.155[0m] [46;1m[1;37m cpu     [0m use [1;37margon2[0m implementation [1;33mdefault[0m
+[2026-07-20 16:38:48[1;30m.155[0m] [44m[1;37m randomx [0m [1;35minit dataset[0m algo [1;37mrx/0 ([0m[1;36m8[0m[1;37m threads)[0m[1;30m seed 0000000000000000...[0m[0m
+[2026-07-20 16:38:48[1;30m.155[0m] [44m[1;37m randomx [0m [1;32mallocated[0m[1;36m 2336 MB[0m[1;30m (2080+256)[0m huge pages [1;31m0% 0/1168[0m [1;32m+JIT[1;30m (1 ms)[0m[0m
+[2026-07-20 16:39:16[1;30m.782[0m] [1;37m[1;33mno results yet[0m
+[2026-07-20 16:39:32[1;30m.257[0m] [0;33m[43;1m[1;37m signal  [0m [0;33mSIGHUP received, exiting[0m[0m

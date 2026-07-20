@@ -1,0 +1,137 @@
+import os
+import time
+import hmac
+import hashlib
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+VIABTC_API_KEY = os.getenv("VIABTC_API_KEY")
+VIABTC_API_SECRET = os.getenv("VIABTC_API_SECRET")
+
+BASE_URL = "https://www.viabtc.com"
+
+
+def create_signature(params):
+
+    query = "&".join(
+        f"{k}={params[k]}"
+        for k in sorted(params)
+    )
+
+    signature = hmac.new(
+        VIABTC_API_SECRET.encode(),
+        query.encode(),
+        hashlib.sha256
+    ).hexdigest()
+
+    return signature
+
+
+
+def viabtc_request(endpoint, params=None):
+
+    if params is None:
+        params = {}
+
+    params["access_id"] = VIABTC_API_KEY
+    params["tonce"] = int(time.time() * 1000)
+
+    params["signature"] = create_signature(params)
+
+    url = BASE_URL + endpoint
+
+    response = requests.get(
+        url,
+        params=params,
+        timeout=10
+    )
+
+    return response.json()
+
+
+
+# Account Hashrate
+
+def get_hashrate():
+
+    url = BASE_URL + "/res/openapi/v1/hashrate"
+
+    params = {
+        "coin": "BTC"
+    }
+
+    response = requests.get(
+        url,
+        params=params,
+        timeout=10
+    )
+
+    return response.json()
+
+
+# Worker List
+
+def get_workers():
+
+    return viabtc_request(
+        "/res/openapi/v1/hashrate/worker"
+    )
+
+
+
+# Earnings
+
+def get_earnings():
+
+    return viabtc_request(
+        "/res/openapi/v1/account/earnings"
+    )
+
+VIABTC_API = "https://www.viabtc.com"
+
+
+def get_account_hashrate(api_key, api_secret):
+
+    url = VIABTC_API + "/res/openapi/v1/hashrate"
+
+    params = {
+        "coin": "BTC"
+    }
+
+    headers = {
+        "X-API-KEY": api_key
+    }
+
+    response = requests.get(
+        url,
+        params=params,
+        headers=headers
+    )
+
+    return response.json()
+
+
+
+def get_workers(api_key, api_secret):
+
+    url = VIABTC_API + "/res/openapi/v1/hashrate/worker"
+
+    params = {
+        "coin": "BTC",
+        "page": 1,
+        "limit": 50
+    }
+
+    headers = {
+        "X-API-KEY": api_key
+    }
+
+    response = requests.get(
+        url,
+        params=params,
+        headers=headers
+    )
+
+    return response.json()
