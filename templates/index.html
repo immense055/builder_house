@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Builder_House Dashboard</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #222;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px #ccc;
+        }
+
+        .title {
+            font-weight: bold;
+            color: #555;
+        }
+
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🚀 Builder_House Dashboard</h1>
+
+<div class="card">
+    <div class="title">System Status</div>
+    <p id="status">Loading...</p>
+</div>
+
+
+<div class="card">
+    <div class="title">System Information</div>
+    <pre id="system">Loading...</pre>
+</div>
+
+
+<script>
+
+fetch("/dashboard/api/status")
+.then(response => response.json())
+.then(data => {
+
+    document.getElementById("status").innerHTML =
+        "Online ✅";
+
+    document.getElementById("system").textContent =
+        JSON.stringify(data, null, 4);
+
+})
+.catch(error => {
+
+    document.getElementById("status").innerHTML =
+        "Offline ❌";
+
+    console.log(error);
+
+});
+
+</script>
+
+
+</body>
+</html>
