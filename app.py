@@ -19,10 +19,11 @@ from logger import log_request
 from middleware import check_rate_limit
 from routes.miners import miners
 from routes.mining import mining_routes
+from routes.recovery import recovery
 
-app.register_blueprint(mining_routes)
 app = Flask(__name__)
 
+app.register_blueprint(mining_routes)
 # Register Blueprints
 app.register_blueprint(auth)
 app.register_blueprint(users)
@@ -30,6 +31,7 @@ app.register_blueprint(admin)
 app.register_blueprint(bitcoin)
 app.register_blueprint(dashboard)
 app.register_blueprint(miners)
+app.register_blueprint(recovery)
 
 @app.route("/")
 def home():

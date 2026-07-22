@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Builder House - Recovery Dashboard</title>
+
+    <link rel="stylesheet" href="/static/recovery/css/recovery.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Builder House</h1>
+    <h2>Recovery Dashboard</h2>
+
+    <div class="card">
+        <h3>Module Status</h3>
+        <p id="status">Online</p>
+    </div>
+
+    <div class="card">
+        <h3>Recovery Jobs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Status</th>
+                    <th>Started</th>
+                </tr>
+            </thead>
+            <tbody id="jobs">
+                <tr>
+                    <td colspan="3">No jobs available</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Recent Logs</h3>
+        <pre id="logs">No logs available.</pre>
+    </div>
+
+</div>
+
+<script src="/static/recovery/js/recovery.js"></script>
+
+</body>
+</html>
