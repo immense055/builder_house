@@ -4,9 +4,9 @@
         "worker-id": null
     },
     "http": {
-        "enabled": false,
+        "enabled": true,
         "host": "127.0.0.1",
-        "port": 0,
+        "port": 18081,
         "access-token": null,
         "restricted": true
     },
@@ -49,11 +49,12 @@
             [8, -1],
             [8, -1]
         ],
-        "rx": [-1, -1, -1, -1, -1, -1, -1, -1],
+        "rx": [0,1,2,3],
         "rx/wow": [-1, -1, -1, -1, -1, -1, -1, -1],
         "cn-lite/0": false,
         "cn/0": false,
-        "rx/arq": "rx/wow"
+        "rx/arq": "rx/wow",
+        "max-threads-hint": 50
     },
     "opencl": {
         "enabled": false,
